@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "stdio.h": "c",
+        "assert.h": "c",
+        "time.h": "c",
+        "ctime": "c",
+        "cwchar": "c",
+        "locale": "c"
+    }
+}
