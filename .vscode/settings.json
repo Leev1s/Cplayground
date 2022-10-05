@@ -6,6 +6,7 @@
         "ctime": "c",
         "cwchar": "c",
         "locale": "c",
-        "cstring": "c"
+        "cstring": "c",
+        "string.h": "c"
     }
 }
