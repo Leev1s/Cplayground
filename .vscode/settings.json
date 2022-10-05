@@ -5,6 +5,7 @@
         "time.h": "c",
         "ctime": "c",
         "cwchar": "c",
-        "locale": "c"
+        "locale": "c",
+        "cstring": "c"
     }
 }

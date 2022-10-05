@@ -28,7 +28,6 @@ typedef struct stake
 }*Stack;
 
 /////////////////////函数列表//////////////////////
-void RaiseError();//发起错误
 Stack StackInit(int x);//栈的初始化          
 void StackDestory(Stack p);//栈的销毁        
 void StackPush(Stack p, STdataType x);//入栈
@@ -37,12 +36,6 @@ bool StackEmpty(Stack p);//判断栈是否为空
 STdataType StackTop(Stack p);//取栈顶元素
 void StackPrinter(Stack P);//打印栈   
 //////////////////////////////////////////////////
-void RaiseError(){
-    puts( "About to abort..../n" );
-    abort();
-    puts( "This will never be executed!/n" );
-    exit( EXIT_SUCCESS );
-}
 
 //栈的初始化 
 Stack StackInit(int x){
@@ -118,7 +111,7 @@ void test(int n){
     StackDestory(myStack);    
 }
 
-int main(void){
+void test_time(){
     clock_t start,stop;
     start = clock();
     test(100);
@@ -127,5 +120,10 @@ int main(void){
     printf("%f\n",(double)(stop-start));
     printf("S:%f\n",((double)(stop-start))/CLOCKS_PER_SEC);//For macos
     //printf("%f\n",((double)(stop-start))/CLK_TCK);
+
+}
+
+int main(void){
+    test(5);
     getchar();
 }
