@@ -24,6 +24,12 @@ typedef struct tree{
     struct tree *R;
 }tree,*Ptree;
 
+//定义返回节点结构体
+typedef struct node{
+    int level;
+    Ptree tree;
+}node,*Pnode;
+
 //递归创建
 void create(tree** p_root,char** txt){
     char C = **txt;(*txt)++;
@@ -48,7 +54,7 @@ Ptree tree_generat(char* txt){
 
 //先序遍历
 void preorder(Ptree root){
-    if(root){printf("%d",root->data);preorder(root->L);preorder(root->R);}
+    if(root!=NULL){printf("%d",root->data);preorder(root->L);preorder(root->R);}
 }
 
 //中序遍历
@@ -67,41 +73,45 @@ void delete(tree** root){
         delete(&(*root)->L);
         delete(&(*root)->R);
         free(*root);
-        *root = NULL;
+        *root = NULL;//！！！！！！！！！！！！！！！！！？？？？？？？？？？
     }
 }
 
 //查找并返回元素所在层
-void find(Ptree root,int target,int level,bool* flag,int* result,bool delete_bool){
+void find(Ptree root,int target,int level,bool* flag,Pnode result){
     if(!*flag){//判断是否找到
         if(root){
             if(root->data == target){
-                printf("已在第%d层找到了目标元素!\n",level);
-                *result = level;//以指针返回层数
+                printf("已在第%d层找到了目标元素%d!\n",level,target);
+                result->tree = root;
+                result->level = level;//以指针返回层数
                 *flag = true;//是否找的的标识，若找到后序堆栈都不会对目标节点进行探索
-                if(delete_bool){delete(&root);root = NULL;}//删除节点及后继
                 return;
             }
-            find(root->L,target,level+1,flag,result,delete_bool);
-            find(root->R,target,level+1,flag,result,delete_bool);
+            find(root->L,target,level+1,flag,result);
+            find(root->R,target,level+1,flag,result);
         }
     }
 }
 
 int main(void){
+    char txt[] = "1246@7@@@5@9@@3@@";
+    int target = 7;//需要寻找的元素
     bool flag = false;
     bool delete_bool = true;
     int level = 0;//首层层数定义为0
-    char txt[] = "1246@7@@@5@9@@3@@";
-    printf("%s\n",txt);
     Ptree myTree = tree_generat(txt);//创建
+    Pnode myNode = (Pnode)malloc(sizeof(node));//以指针传入需要返回的内容
+    /////////////////////////////////////////////////////////////////////////////////
+    printf("###########Start############\n");
+    printf("%s\n",txt);
     preorder(myTree);printf("\n");//先序
     inorder(myTree);printf("\n");//中序
     postorder(myTree);printf("\n");//后序
-    int myTreeLevel;//以指针传入需要返回的层数
-    int target = 5;//需要寻找的元素
-    find(myTree,target,level,&flag,&myTreeLevel,delete_bool);
-    preorder(myTree);printf("\n");//先序
-    printf("End...");
+    find(myTree,target,level,&flag,myNode);
+    preorder(myNode->tree);printf("\n");//先序
+    inorder(myNode->tree);printf("\n");//中序
+    //delete(&myNode->tree);//！！！！！！尚未完成！！！！！！！！！！！！！！！删除后无法置空指针！！！！！
+    printf("############End#############");
     getchar();
 }
