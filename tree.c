@@ -19,7 +19,7 @@
 
 //定义树结构体
 typedef struct tree{
-    int data;
+    char data;
     struct tree *L;
     struct tree *R;
 }tree,*Ptree;
@@ -38,7 +38,7 @@ void create(tree** p_root,char** txt){
     }
     else{
         *p_root = (Ptree)malloc(sizeof(tree));
-        (*p_root)->data = C - '0';
+        (*p_root)->data = C;
         create(&(*p_root)->L,txt);
         create(&(*p_root)->R,txt);
     }
@@ -54,17 +54,17 @@ Ptree tree_generat(char* txt){
 
 //先序遍历
 void preorder(Ptree root){
-    if(root!=NULL){printf("%d",root->data);preorder(root->L);preorder(root->R);}
+    if(root!=NULL){printf("%c",root->data);preorder(root->L);preorder(root->R);}
 }
 
 //中序遍历
 void inorder(Ptree root){
-    if(root){inorder(root->L);printf("%d",root->data);inorder(root->R);}
+    if(root){inorder(root->L);printf("%c",root->data);inorder(root->R);}
 }
 
 //后序遍历
 void postorder(Ptree root){
-    if(root){postorder(root->L);postorder(root->R);printf("%d",root->data);}
+    if(root){postorder(root->L);postorder(root->R);printf("%c",root->data);}
 }
 
 //删除节点及后继
@@ -78,11 +78,11 @@ void delete(tree** root){
 }
 
 //查找并返回元素所在层
-void find(Ptree root,int target,int level,bool* flag,Pnode result){
+void find(Ptree root,char target,int level,bool* flag,Pnode result){
     if(!*flag){//判断是否找到
         if(root){
             if(root->data == target){
-                printf("已在第%d层找到了目标元素%d!\n",level,target);
+                printf("已在第%d层找到了目标元素%c!\n",level,target);
                 result->tree = root;
                 result->level = level;//以指针返回层数
                 *flag = true;//是否找的的标识，若找到后序堆栈都不会对目标节点进行探索
@@ -95,23 +95,34 @@ void find(Ptree root,int target,int level,bool* flag,Pnode result){
 }
 
 int main(void){
-    char txt[] = "1246@7@@@5@9@@3@@";
-    int target = 7;//需要寻找的元素
-    bool flag = false;
-    bool delete_bool = true;
+    printf("######################_Tree_######################\n");
+    printf("Tree example:abd@@efh@@@g@@c@@\n");
+    char txt[50];
+    char target;//需要寻找的元素
     int level = 0;//首层层数定义为0
-    Ptree myTree = tree_generat(txt);//创建
-    Pnode myNode = (Pnode)malloc(sizeof(node));//以指针传入需要返回的内容
-    /////////////////////////////////////////////////////////////////////////////////
-    printf("###########Start############\n");
-    printf("%s\n",txt);
-    preorder(myTree);printf("\n");//先序
-    inorder(myTree);printf("\n");//中序
-    postorder(myTree);printf("\n");//后序
-    find(myTree,target,level,&flag,myNode);
-    preorder(myNode->tree);printf("\n");//先序
-    inorder(myNode->tree);printf("\n");//中序
-    //delete(&myNode->tree);//！！！！！！尚未完成！！！！！！！！！！！！！！！删除后无法置空指针！！！！！
-    printf("############End#############");
-    getchar();
+    bool delete_bool = true;
+    while(true){
+        bool flag = false;
+        printf("Give me a tree:");
+        scanf("%s",txt);
+        getchar();
+        printf("Give me your target:");
+        scanf("%c",&target);
+        Ptree myTree = tree_generat(txt);//创建
+        Pnode myNode = (Pnode)malloc(sizeof(node));//以指针传入需要返回的内容
+        /////////////////////////////////////////////////////////////////////////////////
+        printf("###########Start############\n");
+        printf("%s\n",txt);
+        printf("Preorder :");preorder(myTree);printf("\n");//先序
+        printf("Inorder  :");inorder(myTree);printf("\n");//中序
+        printf("Postorder:");postorder(myTree);printf("\n");//后序
+        find(myTree,target,level,&flag,myNode);
+        //printf("已在第%d层找到了目标元素%c!\n",myNode->level,target);
+        printf("目标元素子树:\n");
+        printf("Preorder :");preorder(myNode->tree);printf("\n");//先序
+        printf("Inorder  :");inorder(myNode->tree);printf("\n");//中序
+        printf("Postorder:");postorder(myNode->tree);printf("\n");//后序
+        //delete(&myNode->tree);//！！！！！！尚未完成！！！！！！！！！！！！！！！删除后无法置空指针！！！！！
+        printf("############End#############\n");
+    }
 }
